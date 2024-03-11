@@ -38,7 +38,7 @@ export function Body() {
 
     useEffect(() => {
         getUserLocation()
-        // requestData()
+        requestData()
     },[userLat, userLng])
 
     return(
