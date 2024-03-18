@@ -1,6 +1,11 @@
 import SunImg  from "../../assets/cloud/clear_day.svg"
 
-export function Sun() {
+interface PropsSun{
+    sunrise: number
+    sunset: number
+}
+
+export function Sun(props: PropsSun) {
     return(
         <div className="">
             <div className="flex gap-3 items-center">
@@ -9,7 +14,9 @@ export function Sun() {
                     <img src={SunImg} alt="sun" className="w-8 h-8" />
                 </div>
                 <div>
-                    05:50
+                    <p>
+                        {props.sunrise}
+                    </p>
                 </div>
             </div>
             <div className="flex gap-3 items-center">
@@ -18,7 +25,9 @@ export function Sun() {
                     <img src={SunImg} alt="sun" className="w-8 h-8" />
                 </div>
                 <div>
-                    18:50
+                    <p>
+                        {props.sunset}
+                    </p>
                 </div>
             </div>
         </div>

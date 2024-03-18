@@ -3,12 +3,25 @@ import { Sun } from "../Sun";
 import { useEffect, useState } from "react";
 import { Temperature } from "../temperature";
 import {  getUserLocation } from "../userLocation";
+import IPv4Service from "../../services/userIp/ip";
 
 interface Data {
     city: string
     temp: string
     description: string
     date: string
+    sunrise: number
+    sunset: number
+    forecast: {
+        date: string
+        max: number
+        min: number
+        weekday: string
+        rain: number
+        rain_probability: number
+        condition: string
+        description: string
+    }
 }
 
 export function Body() {
@@ -16,6 +29,16 @@ export function Body() {
     const [useData, setData] = useState<Data>()
     const [userLat, setUserLat] = useState<number>(0)
     const [userLng, setUserLng] = useState<number>(0)
+
+    const [ipv4, setIpv4] = useState<string | null>('');
+
+    useEffect(() => {
+      const getUserIp = async () => {
+        const userIP = await IPv4Service.getIPv4()
+        setIpv4(userIP)
+      }
+      getUserIp()
+    }, []);
 
     getUserLocation()
     .then(({ lat, lng }) => {
@@ -26,8 +49,9 @@ export function Body() {
         console.error('Erro ao obter a localização:', error);
     });
 
+
     async function requestData() {
-        await axios.get('https://api.hgbrasil.com/weather?format=json-cors&key=5d08c842')
+     await axios.get(`https://api.hgbrasil.com/weather?format=json-cors&key=5d08c842&user_ip=${ipv4}`)
         .then(function (response) {
             setData(response.data.results)
         })
@@ -37,8 +61,11 @@ export function Body() {
     }
 
     useEffect(() => {
-        getUserLocation()
         requestData()
+    },[])
+
+    useEffect(() => {
+        getUserLocation()
     },[userLat, userLng])
 
     return(
@@ -66,11 +93,14 @@ export function Body() {
             </p>
             
             <div className="flex justify-start w-full">
-                <Sun />
+                <Sun 
+                    sunrise={useData?.sunrise || 0}
+                    sunset={useData?.sunset || 0}
+                />
             </div>
 
-            <div className="flex justify-start w-full">
-                <Temperature />
+            <div className="w-full">
+                <Temperature data={useData?.forecast} />
             </div>
         </div>
     )
