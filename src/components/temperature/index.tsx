@@ -3,10 +3,17 @@ import rain from "../../assets/cloud/rain.svg"
 import tempoNublado from "../../assets/cloud/cloudly_day.svg"
 import Chuvasesparsas from "../../assets/cloud/fog.svg" 
 import Loading from "../../utils/loading/loading"
-import Calendar from "../../assets/icons/calendar_month_FILL0_wght400_GRAD0_opsz24.svg"
+import { FaCalendarAlt } from "react-icons/fa";
+
+interface WeatherData {
+    description: string;
+    weekday: ReactNode;
+    date: Key | null | undefined;
+    min: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined;
+}
 
 interface PropsWeek {
-    data: any | undefined
+    data: WeatherData[] | undefined;
 }
 
 interface WeatherImages {
@@ -34,7 +41,7 @@ export function Temperature( props: PropsWeek ) {
     return(
         <>
             <div className="flex items-center gap-2 my-2">
-                <img src={Calendar} alt="calendar"/>
+                <FaCalendarAlt color="#FFF" size={25} />
                 <h1>Previsão para 10 dias</h1>
             </div>
             <div className="w-full h-1 bg-white rounded"></div>
@@ -46,7 +53,7 @@ export function Temperature( props: PropsWeek ) {
                         props.data?.map((value: {
                             description: string
                             weekday: ReactNode
-                            date: Key | null | undefined, min: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined 
+                            date: Key | null | undefined, min: string | number | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | ReactPortal | null | undefined 
                         }) => {
                             const imageSrc = weatherImages[value.description];
     
